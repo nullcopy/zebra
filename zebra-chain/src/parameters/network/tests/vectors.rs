@@ -6,17 +6,7 @@ use crate::{
     amount::{Amount, NonNegative},
     block::Height,
     parameters::{
-        subsidy::{
-            block_subsidy,
-            constants::{
-                mainnet::FUNDING_STREAM_ECC_ADDRESSES_MAINNET,
-                testnet::{
-                    FUNDING_STREAM_ECC_ADDRESSES_TESTNET,
-                    POST_NU6_FUNDING_STREAM_FPF_ADDRESSES_TESTNET,
-                },
-            },
-            funding_stream_values, FundingStreamReceiver, FUNDING_STREAMS_TESTNET,
-        },
+        subsidy::{self, block_subsidy, funding_stream_values, FundingStreamReceiver},
         testnet::{
             self, ConfiguredActivationHeights, ConfiguredFundingStreamRecipient,
             ConfiguredFundingStreams, ConfiguredLockboxDisbursement, RegtestParameters,
@@ -336,7 +326,7 @@ fn check_configured_funding_stream_constraints() {
                 receiver: FundingStreamReceiver::Ecc,
                 numerator: 20,
                 addresses: Some(
-                    FUNDING_STREAM_ECC_ADDRESSES_TESTNET
+                    subsidy::constants::testnet::FUNDING_STREAM_ECC_ADDRESSES
                         .map(Into::into)
                         .to_vec(),
                 ),
@@ -348,7 +338,7 @@ fn check_configured_funding_stream_constraints() {
                 receiver: FundingStreamReceiver::Ecc,
                 numerator: 100,
                 addresses: Some(
-                    FUNDING_STREAM_ECC_ADDRESSES_TESTNET
+                    subsidy::constants::testnet::FUNDING_STREAM_ECC_ADDRESSES
                         .map(Into::into)
                         .to_vec(),
                 ),
@@ -366,7 +356,7 @@ fn check_configured_funding_stream_constraints() {
                         .to_network()
                         .all_funding_streams()[0]
                         .clone(),
-                    FUNDING_STREAMS_TESTNET[0].clone(),
+                    subsidy::constants::testnet::FUNDING_STREAMS[0].clone(),
                 )
             } else {
                 (
@@ -378,7 +368,7 @@ fn check_configured_funding_stream_constraints() {
                         .to_network()
                         .all_funding_streams()[1]
                         .clone(),
-                    FUNDING_STREAMS_TESTNET[1].clone(),
+                    subsidy::constants::testnet::FUNDING_STREAMS[1].clone(),
                 )
             };
 
@@ -436,7 +426,7 @@ fn check_configured_funding_stream_constraints() {
                     receiver: FundingStreamReceiver::Ecc,
                     numerator: 101,
                     addresses: Some(
-                        FUNDING_STREAM_ECC_ADDRESSES_TESTNET
+                        subsidy::constants::testnet::FUNDING_STREAM_ECC_ADDRESSES
                             .map(Into::into)
                             .to_vec(),
                     ),
@@ -454,7 +444,7 @@ fn check_configured_funding_stream_constraints() {
                     receiver: FundingStreamReceiver::Ecc,
                     numerator: 10,
                     addresses: Some(
-                        FUNDING_STREAM_ECC_ADDRESSES_MAINNET
+                        subsidy::constants::mainnet::FUNDING_STREAM_ECC_ADDRESSES
                             .map(Into::into)
                             .to_vec(),
                     ),
@@ -621,7 +611,7 @@ fn funding_streams_default_values() {
                     receiver: FundingStreamReceiver::MajorGrants,
                     numerator: 2,
                     addresses: Some(
-                        POST_NU6_FUNDING_STREAM_FPF_ADDRESSES_TESTNET
+                        subsidy::constants::testnet::POST_NU6_FUNDING_STREAM_FPF_ADDRESSES
                             .iter()
                             .map(|s| s.to_string())
                             .collect(),
@@ -647,7 +637,7 @@ fn funding_streams_default_values() {
             .get(&FundingStreamReceiver::ZcashFoundation)
             .unwrap()
             .addresses(),
-        FUNDING_STREAMS_TESTNET[0]
+        subsidy::constants::testnet::FUNDING_STREAMS[0]
             .recipients()
             .get(&FundingStreamReceiver::ZcashFoundation)
             .unwrap()
@@ -656,7 +646,7 @@ fn funding_streams_default_values() {
     // Check if value was copied from default
     assert_eq!(
         network.all_funding_streams()[1].height_range(),
-        FUNDING_STREAMS_TESTNET[1].height_range()
+        subsidy::constants::testnet::FUNDING_STREAMS[1].height_range()
     );
     // Check if value hasn't changed
     assert_eq!(
